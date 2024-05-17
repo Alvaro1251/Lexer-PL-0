@@ -55,6 +55,12 @@ def afd_equal(cadena):
     else:
         return ESTADO_TRAMPA
 
+def afd_walrus(cadena):
+    if cadena == ":=":
+        return ESTADO_FINAL
+    else:
+        return ESTADO_TRAMPA
+
 def afd_parenizq(cadena):
     if cadena == "(":
         return ESTADO_FINAL
@@ -66,40 +72,46 @@ def afd_parender(cadena):
         return ESTADO_FINAL
     else:
         return ESTADO_TRAMPA
-        
+
+def afd_coma(cadena):
+    if cadena == ",":
+        return ESTADO_FINAL
+    else:
+        return ESTADO_TRAMPA
+
 def afd_puntoycoma(cadena):
     if cadena == ";":
         return ESTADO_FINAL
     else:
         return ESTADO_TRAMPA
         
-def afd_opsuma(cadena):
+def afd_sumoperator(cadena):
     if cadena in ["-","+"]:
         return ESTADO_FINAL
     else:
         return ESTADO_TRAMPA   
     
-def afd_opmult(cadena):
-    if cadena == "*":
+def afd_multoperator(cadena):
+    if cadena in ["*", "/"]:
      return ESTADO_FINAL
     else:
      return ESTADO_TRAMPA
 
-def afd_oprel(cadena):
-    if cadena in [">","<","==",">=","<=","!="]:
+def afd_relation(cadena):
+    if cadena in [">","<","=",">=","<=","<>"]:
       return ESTADO_FINAL
     else:
         return ESTADO_TRAMPA
 
 # PALABRAS RESERVADAS
 
-def afd_si(cadena):
+def afd_if(cadena):
     estado_actual = 0
     estados_finales = [2]
     for caracter in cadena:
-        if estado_actual == 0 and caracter =="s":
+        if estado_actual == 0 and caracter =="i":
             estado_actual = 1
-        elif estado_actual == 1 and caracter == "i":
+        elif estado_actual == 1 and caracter == "f":
             estado_actual = 2
         else:
             estado_actual = -1
@@ -111,26 +123,18 @@ def afd_si(cadena):
     else:
         return ESTADO_NO_FINAL
 
-def afd_entonces(cadena):
+def afd_then(cadena):
     estado_actual = 0
-    estados_finales = [8]
+    estados_finales = [4]
     for caracter in cadena:
-        if estado_actual == 0 and caracter == "e":
+        if estado_actual == 0 and caracter == "t":
             estado_actual = 1
-        elif estado_actual == 1 and caracter == "n":
+        elif estado_actual == 1 and caracter == "h":
             estado_actual = 2
-        elif estado_actual == 2 and caracter == "t":
+        elif estado_actual == 2 and caracter == "e":
             estado_actual = 3
-        elif estado_actual == 3 and caracter == "o":
+        elif estado_actual == 3 and caracter == "n":
             estado_actual = 4
-        elif estado_actual == 4 and caracter == "n":
-            estado_actual = 5
-        elif estado_actual == 5 and caracter == "c":
-            estado_actual = 6
-        elif estado_actual ==6 and caracter == "e":
-            estado_actual = 7
-        elif estado_actual == 7 and caracter == "s":
-            estado_actual = 8
         else:
             estado_actual = -1
             break
@@ -141,17 +145,17 @@ def afd_entonces(cadena):
     else:
       return ESTADO_NO_FINAL
 
-def afd_sino(cadena):
+def afd_call(cadena):
     estado_actual = 0
     estados_finales = [4]
     for caracter in cadena:
-        if estado_actual == 0 and caracter == "s":
+        if estado_actual == 0 and caracter == "c":
             estado_actual = 1
-        elif estado_actual == 1 and caracter == "i":
+        elif estado_actual == 1 and caracter == "a":
             estado_actual = 2
-        elif estado_actual == 2 and caracter == "n":
+        elif estado_actual == 2 and caracter == "l":
             estado_actual = 3
-        elif estado_actual == 3 and caracter == "o":
+        elif estado_actual == 3 and caracter == "l":
             estado_actual = 4
         else:
             estado_actual = -1
@@ -163,19 +167,19 @@ def afd_sino(cadena):
     else:
       return  ESTADO_NO_FINAL
 
-def afd_finsi(cadena):
+def afd_begin(cadena):
     estado_actual = 0
     estados_finales = [5]
     for caracter in cadena:
-        if estado_actual == 0 and caracter == "f":
+        if estado_actual == 0 and caracter == "b":
             estado_actual = 1
-        elif estado_actual == 1 and caracter == "i":
+        elif estado_actual == 1 and caracter == "e":
             estado_actual = 2
-        elif estado_actual == 2 and caracter == "n":
+        elif estado_actual == 2 and caracter == "g":
             estado_actual = 3
-        elif estado_actual == 3 and caracter == "s":
+        elif estado_actual == 3 and caracter == "i":
             estado_actual = 4
-        elif estado_actual == 4 and caracter == "i":
+        elif estado_actual == 4 and caracter == "n":
             estado_actual = 5
         else:
             estado_actual = -1
@@ -187,24 +191,16 @@ def afd_finsi(cadena):
     else:
        return ESTADO_NO_FINAL
 
-def afd_repetir(cadena):
+def afd_end(cadena):
     estado_actual = 0
-    estados_finales = [7]
+    estados_finales = [3]
     for caracter in cadena:
-        if estado_actual == 0 and caracter == "r":
+        if estado_actual == 0 and caracter == "e":
             estado_actual = 1
-        elif estado_actual == 1 and caracter == "e":
+        elif estado_actual == 1 and caracter == "n":
             estado_actual = 2
-        elif estado_actual == 2 and caracter == "p":
+        elif estado_actual == 2 and caracter == "d":
             estado_actual = 3
-        elif estado_actual == 3 and caracter == "e":
-            estado_actual = 4
-        elif estado_actual == 4 and caracter == "t":
-            estado_actual = 5
-        elif estado_actual == 5 and caracter == "i":
-            estado_actual = 6
-        elif estado_actual == 6 and caracter == "r":
-            estado_actual = 7
         else:
             estado_actual = -1
             break
@@ -340,9 +336,9 @@ def afd_finfunc(cadena):
         return ESTADO_NO_FINAL
     
 
-tokens_posibles = [ ("si",afd_si), ("entonces",afd_entonces), ("sino",afd_sino), ("finsi",afd_finsi), ("repetir",afd_repetir), ("hasta",afd_hasta), 
- ("leer",afd_leer), ("mostrar",afd_mostrar), ("func",afd_func), ("finfunc",afd_finfunc), ("id",afd_id),("num",afd_num), ("equal",afd_equal), 
- (";",afd_puntoycoma), ("(",afd_parenizq), (")",afd_parender), ("opmult",afd_opmult), ("opsuma",afd_opsuma), ("oprel",afd_oprel) ] 
+tokens_posibles = [ ("if",afd_if), ("then",afd_then), ("call",afd_call), ("begin",afd_begin), ("repetir",afd_repetir), ("hasta",afd_hasta), 
+ ("leer",afd_leer), ("mostrar",afd_mostrar), ("func",afd_func), ("finfunc",afd_finfunc), ("id",afd_id),("num",afd_num), ("equal",afd_equal), ("walrus", afd_walrus), ("coma", afd_coma),
+ (";",afd_puntoycoma), ("(",afd_parenizq), (")",afd_parender), ("multoperator",afd_multoperator), ("sumoperator",afd_sumoperator), ("relation",afd_relation) ] 
 
 def lexer(codigofuente):
     tokens = [] 
